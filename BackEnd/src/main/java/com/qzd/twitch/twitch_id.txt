@@ -1,0 +1,8 @@
+client_id:
+f4x3mzbqk8icuy9hefwk1c5js6kagf
+secret:
+gf4scnfwi0hs5hvvtfybixpwbuputa
+
+"access_token": "ov30j3g4hmxdm6bgla9vyiouyxamy9",
+    "expires_in": 5152255,
+    "token_type": "bearer"
