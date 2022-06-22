@@ -1,80 +1,70 @@
-import { Button, Form, Input, message, Modal } from 'antd';
-import React from 'react';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { login } from '../utils';
- 
-class Login extends React.Component {
-  state = {
-    displayModal: false
+import { Button, Form, Input, message, Modal } from 'antd'
+import React, { useState } from 'react'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { login } from '../utils'
+
+function Login({ onSuccess }) {
+  const [displayModal, setDisplayModal] = useState(false)
+
+  const handleCancel = () => {
+    setDisplayModal(false)
   }
- 
-  handleCancel = () => {
-    this.setState({
-      displayModal: false,
-    })
+
+  const signinOnClick = () => {
+    setDisplayModal(true)
   }
- 
-  signinOnClick = () => {
-    this.setState({
-      displayModal: true,
-    })
-  }
- 
-  onFinish = (data) => {
+
+  const onFinish = (data) => {
     login(data)
       .then((data) => {
-        this.setState({
-          displayModal: false,
-        })
-        message.success(`Welcome back, ${data.name}`);
-        this.props.onSuccess();
+        setDisplayModal(false)
+        message.success(`Welcome back, ${data.name}`)
+        onSuccess()
       }).catch((err) => {
-        message.error(err.message);
+        message.error(err.message)
       })
   }
- 
-  render = () => {
-    return (
-      <>
-        <Button shape="round" onClick={this.signinOnClick} style={{ marginRight: '20px' }}>
+
+  return (
+    <>
+      <Button shape="round" onClick={signinOnClick} style={{ marginRight: '20px' }}>
         Login</Button>
-        <Modal
-          title="Log in"
-          visible={this.state.displayModal}
-          onCancel={this.handleCancel}
-          footer={null}
-          destroyOnClose={true}
+      <Modal
+        title="Log in"
+        visible={displayModal}
+        onCancel={handleCancel}
+        footer={null}
+        destroyOnClose={true}
+      >
+        <Form
+          name="normal_login"
+          onFinish={onFinish}
+          preserve={false}
         >
-          <Form
-            name="normal_login"
-            onFinish={this.onFinish}
-            preserve={false}
+          <Form.Item
+            name="user_id"
+            rules={[{ required: true, message: 'Please input your Username!' }]}
           >
-            <Form.Item
-              name="user_id"
-              rules={[{ required: true, message: 'Please input your Username!' }]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Username" />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[{ required: true, message: 'Please input your Password!' }]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Password"
-              />
-            </Form.Item>
- 
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Login</Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-      </>
-    )
-  }
+            <Input prefix={<UserOutlined />} placeholder="Username" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: 'Please input your Password!' }]}
+          >
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Password"
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Login</Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+  )
 }
- 
-export default Login;
+
+export default Login

@@ -1,94 +1,58 @@
-import React from 'react';
-import { Menu, Button, Drawer } from 'antd';
-import { EyeOutlined, YoutubeOutlined, VideoCameraOutlined, StarFilled } from '@ant-design/icons';
+import React, { useState } from 'react'
+import { Menu, Button, Drawer } from 'antd'
+import { EyeOutlined, YoutubeOutlined, VideoCameraOutlined, StarFilled } from '@ant-design/icons'
+import FavoriteMenu from './FavoriteMenu'
  
-const { SubMenu } = Menu;
+const { SubMenu } = Menu
 const MenuKey = {
   Streams: 'streams',
   Videos: 'videos',
   Clips: 'clips'
 }
-class Favorites extends React.Component {
-  state = {
-    displayDrawer: false,
+
+function Favorites({data}) {
+  
+  const [displayDrawer, setDisplayDrawer] = useState(false)
+  const { VIDEO, STREAM, CLIP } = data
+ 
+  const onDrawerClose = () => {
+    setDisplayDrawer(false)
   }
  
-  onDrawerClose = () => {
-    this.setState({
-      displayDrawer: false,
-    })
+  const onFavoriteClick = () => {
+    setDisplayDrawer(true)
   }
- 
-  onFavoriteClick = () => {
-    this.setState({
-      displayDrawer: true,
-    })
-  }
- 
-  render = () => {
-    const { VIDEO, STREAM, CLIP } = this.props.data;
- 
-    return (
-      <>
-        <Button type="primary" shape="round" onClick={this.onFavoriteClick} icon={<StarFilled />}>
-          My Favorites</Button>
-        <Drawer
-          title="My Favorites"
-          placement="right"
-          width={720}
-          visible={this.state.displayDrawer}
-          onClose={this.onDrawerClose}
+
+  return (
+    <>
+      <Button type="primary" shape="round" onClick={onFavoriteClick} icon={<StarFilled />}>
+        My Favorites</Button>
+      <Drawer
+        title="My Favorites"
+        placement="right"
+        width={720}
+        visible={displayDrawer}
+        onClose={onDrawerClose}
+      >
+        <Menu
+          mode="inline"
+          defaultOpenKeys={[MenuKey.Streams]}
+          style={{ height: '100%', borderRight: 0 }}
+          selectable={false}
         >
-          <Menu
-            mode="inline"
-            defaultOpenKeys={[MenuKey.Streams]}
-            style={{ height: '100%', borderRight: 0 }}
-            selectable={false}
-          >
-            <SubMenu key={MenuKey.Streams} icon={<EyeOutlined />} title="Streams">
-              {
-                STREAM.map((item) => {
-                  return (
-                    <Menu.Item key={item.id}>
-                      <a href={item.url} target="_blank" rel="noopener noreferrer">
-                        {`${item.broadcaster_name} - ${item.title}`}
-                      </a>
-                    </Menu.Item>
-                  )
-                })
-              }
-            </SubMenu>
-            <SubMenu key={MenuKey.Videos} icon={<YoutubeOutlined />} title="Videos">
-              {
-                VIDEO.map((item) => {
-                  return (
-                    <Menu.Item key={item.id}>
-                      <a href={item.url} target="_blank" rel="noopener noreferrer">
-                        {`${item.broadcaster_name} - ${item.title}`}
-                      </a>
-                    </Menu.Item>
-                  )
-                })
-              }
-            </SubMenu>
-            <SubMenu key={MenuKey.Clips} icon={<VideoCameraOutlined />} title="Clips">
-              {
-                CLIP.map((item) => {
-                  return (
-                    <Menu.Item key={item.id}>
-                      <a href={item.url} target="_blank" rel="noopener noreferrer">
-                        {`${item.broadcaster_name} - ${item.title}`}
-                      </a>
-                    </Menu.Item>
-                  )
-                })
-              }
-            </SubMenu>
-          </Menu>
-        </Drawer>
-      </>
-    )
-  }
+          <SubMenu key={MenuKey.Streams} icon={<EyeOutlined />} title="Streams">
+            <FavoriteMenu items = {STREAM}/>
+          </SubMenu>
+          <SubMenu key={MenuKey.Videos} icon={<YoutubeOutlined />} title="Videos">
+            <FavoriteMenu items = {VIDEO}/>
+          </SubMenu>
+          <SubMenu key={MenuKey.Clips} icon={<VideoCameraOutlined />} title="Clips">
+            <FavoriteMenu items = {CLIP}/>
+          </SubMenu>
+        </Menu>
+      </Drawer>
+    </>
+  )
 }
  
-export default Favorites;
+export default Favorites
