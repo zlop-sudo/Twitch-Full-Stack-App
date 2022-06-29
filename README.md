@@ -14,9 +14,12 @@ A Full-stack web application for users to search twitch resources (stream/video/
 
 ## Deployment
 AWS EC2
+
 single instance: http://3.87.217.38
+
 Auto Scaling Group: http://3.83.125.137
 
+##
 
 
 
